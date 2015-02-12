@@ -1,0 +1,112 @@
+@(films: List[Film], filmForm: Form[Film], filterFilmForm: Form[FilterFilm])
+
+@import helper._
+@import helper.twitterBootstrap._
+@implicitField = @{ FieldConstructor(forms.formInline.f) }
+
+@main("Films Collection") {
+
+<div id="filterform">
+@form(action=routes.Application.filterFilms(),'class -> "form-horizontal") {
+<legend>Filter movies</legend>
+
+@select(
+    filterFilmForm("country"),
+    options(FilterFilm.countryOptions),
+    '_default -> "Choose a country"
+    )
+
+@select(
+    filterFilmForm("year"),
+    options(FilterFilm.yearOptions),
+    '_default -> "Choose a year"
+    )
+
+@select(
+    filterFilmForm("director"),
+    options(FilterFilm.directorOptions),
+    '_default -> "Choose a director"
+    )
+
+@select(
+    filterFilmForm("genre"),
+    options(FilterFilm.genreOptions),
+    '_default -> "Choose a genre"
+    )
+
+
+    <div class="control-group">
+        <div class="controls">
+            <button type="submit" class="btn btn-primary">Filter</button>
+        </div>
+    </div>
+
+}
+</div>
+
+<h2>@films.size() movie(s)</h2>
+
+
+@for(film <- films) {
+
+    <div class="odd">
+        <h4>@film.label</h4>
+        <div class="row">
+            <div class="span2">
+                <img class="img-rounded" src='@film.picture' height="209" width="140" alt="Image of Steven Spielberg">
+            </div>
+            <div class="span10">
+                <dl class="dl-horizontal">
+                    <dt>Country</dt>
+                    <dd>@film.country</dd>
+                    <dt>Year</dt>
+                    <dd>@film.year</dd>
+                    <dt>Director</dt>
+                    <dd>@film.director</dd>
+                    <dt>Genre</dt>
+                    <dd>@film.genre</dd>
+                </dl>
+                <p>@film.description</p>
+                @form(routes.Application.deleteFilm(film.id)) {
+                <button type="submit" class="btn btn-danger">Delete</button>
+                }
+            </div>
+        </div>
+    </div>
+}
+
+@form(action=routes.Application.newFilm(),'class -> "form-horizontal", 'enctype -> "multipart/form-data") {
+<legend>Add a new movie</legend>
+
+@inputText(filmForm("label"))
+
+@select(
+filmForm("country"),
+options(FilterFilm.countryOptions),
+'_default -> "Choose a country"
+)
+
+@inputText(filmForm("year"))
+
+@inputText(filmForm("director"))
+
+@select(
+filmForm("genre"),
+options(FilterFilm.genreOptions),
+'_default -> "Choose a genre"
+)
+
+@textarea(field = filmForm("description"), args = 'rows -> 6, 'cols -> 50)
+
+<div class="control-label">file poster</div>
+<div class="controls"><input id="picture" type="file" name="picture"></div>
+
+<div class="control-group">
+    <div class="controls">
+        <button type="submit" class="btn btn-primary">Create</button>
+    </div>
+</div>
+
+}
+
+}
