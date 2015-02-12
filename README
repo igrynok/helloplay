@@ -1,2 +1,4 @@
 A simple 'Movie Library' app with Play 2.0 framework
 ====================================================  
+
+The project allows to manage a collection of movies. Users can easily find a particular film by name or by other search criteria, like genre, director, country etc. The main page shows a searching filter and a list of films. Each film is presented in the form of short description with a thumbnail of the film poster. 
